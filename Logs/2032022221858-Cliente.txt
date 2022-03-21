@@ -1,0 +1,5 @@
+Nombre de archivo test_file.jpg
+Tamaño archivo: 4649951
+Cliente: 192.168.193.131
+Exitosa: Y
+Tiempo de transferencia: 6.746368169784546
