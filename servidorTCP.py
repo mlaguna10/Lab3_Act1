@@ -17,9 +17,9 @@ MAX_THREADS = 100
 threads = []
 dir_src = os.getcwd()
 #carpeta para el almacenamiento de los archivos transmitidos. 
-dir_data = os.path.join(dir_src,"data")
+dir_ArchivosRecibidos = os.path.join(dir_src,"ArchivosRecibidos")
 #carpeta para almacenar los archivos que se usarán de prueba.
-dir_archivos = os.path.join(dir_src,"archivos")
+dir_Archivos = os.path.join(dir_src,"Archivos")
 
 # Se crea el socket de espera y se conecta el servidor
 servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -32,7 +32,7 @@ print ('Escuchando en (ip:puerto){}:{}'.format(host, port))
 def thread_conexion(socket__conexion_servidor_cliente, nombre_cliente, puerto_cliente):
     
     #se envia la lista de archivos primero
-    os.chdir(dir_archivos)
+    os.chdir(dir_Archivos)
     #esta linea envia un string. Toca codificarlo a un stream de bytes.
     socket__conexion_servidor_cliente.sendto('Hola'.encode(), (nombre_cliente, puerto_cliente))
 
@@ -47,7 +47,7 @@ def thread_conexion(socket__conexion_servidor_cliente, nombre_cliente, puerto_cl
     peticion = socket__conexion_servidor_cliente.recv(TAM_BUFFER)
 
     while peticion != b'TERMINADA':
-        os.chdir(dir_archivos)
+        os.chdir(dir_Archivos)
         print ('Pidieron: {}'.format(peticion))
         
         #si la peticion no existe, espera una peticion correcta del cliente informando que no existe el archivo solicitado
@@ -103,7 +103,7 @@ def thread_conexion(socket__conexion_servidor_cliente, nombre_cliente, puerto_cl
         completa = "Yes"
         if recibidos*TAM_BUFFER < tam_archivo:
             completa = "No"
-        os.chdir(dir_data)
+        os.chdir(dir_ArchivosRecibidos)
 
         file = open(nombretxt,"a")
         file.write('Transferencia terminada. Inicio: {}. Fin: {}. Archivo: {}. Tamanio archivo: {}. Completo: {}. Total enviados: {}. Recibidos: {}. Corruptos: {}. Perdidos: {}. Tiempo envio: {}. Clientes al tiempo: {}\n'.format(tiempo_inicial_str, tiempo_final_server_str, peticion.decode(), str(tam_archivo) + " bytes", completa, enviados, recibidos, corruptos, perdidos, tiempo_transcurrido, clientes_paralelos))

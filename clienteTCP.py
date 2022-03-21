@@ -8,7 +8,7 @@ import hashlib
 TAM_BUFFER = 1024
 lista_archivos = []
 dir_src = os.getcwd()
-dir_data = os.path.join(dir_src,"data")
+dir_ArchivosRecibidos = os.path.join(dir_src,"ArchivosRecibidos")
 servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 def cerrarConexion():
@@ -56,7 +56,7 @@ def solicitar_archivos(mensaje):
         print('Recibiendo:')
         num_archivos = 0
         corruptos = 0
-        os.chdir(dir_data)
+        os.chdir(dir_ArchivosRecibidos)
         with open(mensaje, 'wb') as f:
             while tam_actual < tam_archivo:
 
