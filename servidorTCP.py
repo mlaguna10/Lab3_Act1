@@ -91,13 +91,13 @@ def thread_conexion(socket__conexion_servidor_cliente, nombre_cliente, puerto_cl
 
         socket__conexion_servidor_cliente.sendto(str(tiempo_transcurrido).encode(), (nombre_cliente, puerto_cliente))
         enviados = int(socket__conexion_servidor_cliente.recv(TAM_BUFFER).decode())
-        socket__conexion_servidor_cliente.sendto(str('d1').encode(), (nombre_cliente, puerto_cliente))
+        socket__conexion_servidor_cliente.sendto(str('YA').encode(), (nombre_cliente, puerto_cliente))
         recibidos = int(socket__conexion_servidor_cliente.recv(TAM_BUFFER).decode())
-        socket__conexion_servidor_cliente.sendto(str('d2').encode(), (nombre_cliente, puerto_cliente))
+        socket__conexion_servidor_cliente.sendto(str('YA').encode(), (nombre_cliente, puerto_cliente))
         perdidos= int(socket__conexion_servidor_cliente.recv(TAM_BUFFER).decode())
-        socket__conexion_servidor_cliente.sendto(str('d3').encode(), (nombre_cliente, puerto_cliente))
+        socket__conexion_servidor_cliente.sendto(str('YA').encode(), (nombre_cliente, puerto_cliente))
         corruptos= int(socket__conexion_servidor_cliente.recv(TAM_BUFFER).decode())
-        socket__conexion_servidor_cliente.sendto(str('d4').encode(), (nombre_cliente, puerto_cliente))
+        socket__conexion_servidor_cliente.sendto(str('YA').encode(), (nombre_cliente, puerto_cliente))
         tiempo_total =time.time() - tiempo_inicio_conexion
 
         completa = "Yes"
