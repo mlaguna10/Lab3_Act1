@@ -4,11 +4,13 @@ import time
 import os
 import sys
 import hashlib
+import datetime 
 
 TAM_BUFFER = 1024
 lista_archivos = []
 dir_src = os.getcwd()
 dir_ArchivosRecibidos = os.path.join(dir_src,"ArchivosRecibidos")
+dir_Logs= os.path.join(dir_src,"Logs")
 servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 def cerrarConexion():
@@ -107,9 +109,31 @@ def solicitar_archivos(mensaje):
         if tam_diferencia == 0:
             stiempo = 'Recibido archivo completo. Tiempo transcurrido: {}. Bytes esperados: {}. Bytes recibidos: {}. Paquetes recibidos: {}. Paquetes corruptos: {}. Paquetes perdidos: {}. Paquetes enviados:{}'.format(tiempo_transcurrido,tam_archivo,tam_actual,num_archivos, corruptos, perdidos, enviados)
             print(stiempo)
+            generarLog(mensaje,tam_archivo, nombre_servidor, 'Y', tiempo_transcurrido)
         else:
             stiempo = 'Recibido archivo incompleto. Tiempo transcurrido: {}. Bytes esperados: {}. Bytes recibidos: {}. Paquetes recibidos: {}. Paquetes corruptos: {}. Paquetes perdidos: {}. Paquetes enviados:{}'.format(tiempo_transcurrido,tam_archivo,tam_actual,num_archivos, corruptos, perdidos, enviados)
             print(stiempo)
+    
+
+
+def generarLog(nombre_archivo, tamanio, cliente, exito, tiempo): 
+    datem = datetime.datetime.today()
+    anio = datem.day 
+    mes = datem.month      # 5
+    dia = datem.year       # 2021
+    hora = datem.hour       # 11
+    min = datem.minute     # 22
+    seg = datem.second     # 3
+    nombre = str(anio) + str(mes) + str(dia) + str(hora) + str(min) + str(seg)  +'-Cliente'+'.txt'
+    os.chdir(dir_Logs)
+    with open(nombre, 'wb') as f:
+        text = ''
+        text +='Nombre de archivo {nom}\n'.format(nom=nombre_archivo)
+        text += 'Tamaño archivo: {tam}\n'.format(tam = tamanio)
+        text += 'Cliente: {cl}\n'.format(cl = cliente)
+        text += 'Exitosa: {ex}\n'.format(ex = exito)
+        text += 'Tiempo de transferencia: {t}\n'.format(t = tiempo)
+        f.write(text.encode())
 
 
 

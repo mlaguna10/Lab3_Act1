@@ -5,6 +5,7 @@ import os.path
 import time
 import hashlib
 import math
+import datetime 
 
 #server_ip = '192.168.193.131'
 host = input('Digite IP del servidor (Remoto: 192.168.193.131 Local: 127.0.0.1): ')
@@ -16,6 +17,7 @@ TAM_BUFFER = 1024
 MAX_THREADS = 100
 threads = []
 dir_src = os.getcwd()
+dir_Logs= os.path.join(dir_src,"Logs")
 #carpeta para el almacenamiento de los archivos transmitidos. 
 dir_ArchivosRecibidos = os.path.join(dir_src,"ArchivosRecibidos")
 #carpeta para almacenar los archivos que se usarán de prueba.
@@ -103,6 +105,12 @@ def thread_conexion(socket__conexion_servidor_cliente, nombre_cliente, puerto_cl
         completa = "Yes"
         if recibidos*TAM_BUFFER < tam_archivo:
             completa = "No"
+
+        if completa == "Yes":
+            generarLog(peticion,tam_archivo, str(nombre_cliente)+':'+str(puerto_cliente), 'Y', tiempo_transcurrido)
+        else:
+            generarLog(peticion,tam_archivo, str(nombre_cliente)+':'+str(puerto_cliente), 'N', tiempo_transcurrido)
+        
         os.chdir(dir_ArchivosRecibidos)
 
         file = open(nombretxt,"a")
@@ -117,6 +125,25 @@ def thread_conexion(socket__conexion_servidor_cliente, nombre_cliente, puerto_cl
     print('Conexion cerrada con {}:{}.'.format(nombre_cliente, puerto_cliente))
     #se cierra el socket ahora si
     socket__conexion_servidor_cliente.close()
+
+def generarLog(nombre_archivo, tamanio, cliente, exito, tiempo): 
+    datem = datetime.datetime.today()
+    anio = datem.day 
+    mes = datem.month      # 5
+    dia = datem.year       # 2021
+    hora = datem.hour       # 11
+    min = datem.minute     # 22
+    seg = datem.second     # 3
+    nombre = str(anio) + str(mes) + str(dia) + str(hora) + str(min) + str(seg) +'-Servidor'+ '.txt'
+    os.chdir(dir_Logs)
+    with open(nombre, 'wb') as f:
+        text = ''
+        text +='Nombre de archivo {nom}\n'.format(nom=nombre_archivo)
+        text += 'Tamaño archivo: {tam}\n'.format(tam = tamanio)
+        text += 'Cliente: {cl}\n'.format(cl = cliente)
+        text += 'Exitosa: {ex}\n'.format(ex = exito)
+        text += 'Tiempo de transferencia: {t}\n'.format(t = tiempo)
+        f.write(text.encode())
 
 #####Esta funcion es un thread para la recepcion de multiples clientes.
 def manejador_clientes():
